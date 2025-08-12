@@ -19,3 +19,4 @@ class ComicGroupMessageTestCase(TestCase):
         print(response.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(str(self.comic_group.id),str(response.data[0]['comic_group']))
+

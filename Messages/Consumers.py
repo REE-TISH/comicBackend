@@ -1,0 +1,60 @@
+# chat/consumers.py
+from channels.generic.websocket import AsyncWebsocketConsumer
+import json
+from ComicData.models import ComicGroup
+from Messages.models import ComicGroupMessage
+from channels.db import database_sync_to_async
+
+class ChatConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        self.room_name = self.scope['url_route']['kwargs']['room_name']
+        self.room_group_name = f'chat_{self.room_name}'
+        id = self.room_name.split('_')[1]  # Assuming room_name is in the format 'chat_<id>'
+        self.group = await self.get_comic_group(id) # Fetch the ComicGroup instance
+        
+        await self.channel_layer.group_add(
+            self.room_group_name,
+            self.channel_name
+        )
+
+        await self.accept()
+
+    async def disconnect(self, close_code):
+        await self.channel_layer.group_discard(
+            self.room_group_name,
+            self.channel_name
+        )
+
+    async def receive(self, text_data):
+        text_data_json = json.loads(text_data)
+        self.id = await self.save_message(self.group,text_data_json['sender'], text_data_json['body'], text_data_json.get('avatar', None))
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'chat_message',
+                'message': text_data,
+                 # Include the message ID in the event
+                # Include avatar if provided   
+            }
+        )
+
+    async def chat_message(self, event):
+        data = json.loads(event['message'])
+        data['id'] = self.id  # Add the message ID to the data
+        event['message'] = json.dumps(data)  # Convert back to JSON string
+        await self.send(text_data=event['message'])
+
+    @database_sync_to_async
+    def get_comic_group(self, id):
+        return ComicGroup.objects.get(id=id)
+    
+    @database_sync_to_async
+    def save_message(self, group, sender, body, avatar):
+        message = ComicGroupMessage.objects.create(
+            comic_group=group,
+            sender=sender,          
+            body=body,
+            avatar=avatar
+        )
+        print(message)
+        return message.id

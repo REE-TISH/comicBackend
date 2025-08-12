@@ -12,3 +12,7 @@ class ComicGroupListView(generics.ListAPIView):
     queryset = ComicGroup.objects.all()
     serializer_class = ComicGroupSerializer
 
+class ComicGroupDetailView(generics.RetrieveAPIView):
+    queryset = ComicGroup.objects.all()
+    serializer_class = ComicGroupSerializer
+    lookup_field = 'id'

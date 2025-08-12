@@ -13,3 +13,6 @@ class TestMessageForNoMessageInGroup(TestCase):
         response = self.client.get(reverse('comic-group-message-list', kwargs={'group_id': self.comic_group.id}))
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response.data, {"detail": "No messages found for this comic group."}, "Expected no messages message when the group has no messages.")
+
+
+        

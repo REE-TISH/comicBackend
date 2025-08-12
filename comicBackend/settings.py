@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'channels',
+    'daphne',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -44,7 +45,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ASGI_APPLICATION = 'backend.asgi.application'
+ASGI_APPLICATION = 'comicBackend.asgi.application'
 
 # Redis as channel layer
 CHANNEL_LAYERS = {

@@ -1,10 +1,16 @@
 import os
-import django
-from channels.routing import get_default_application
-from Messages.routing import application
+from django.core.asgi import get_asgi_application
+from channels.routing import ProtocolTypeRouter, URLRouter
+from channels.auth import AuthMiddlewareStack
+import Messages.routing
 
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'comicBackend.settings')
-
-django.setup()
-application = get_default_application()
+application = ProtocolTypeRouter({
+    "http": get_asgi_application(),  # handles normal HTTP requests
+    "websocket": AuthMiddlewareStack(  # handles WebSocket with user sessions
+        URLRouter(
+            Messages.routing.websocket_urlpatterns  # your WebSocket routes
+        )
+    )
+})
