@@ -26,24 +26,29 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
     async def receive(self, text_data):
-        
-     
+        data = json.loads(text_data)
+        # Save the message ONCE here
+        message_id = await self.save_message(
+            self.group,
+            data['sender'],
+            data['body'],
+            data.get('avatar', None)
+        )
+        data['id'] = message_id
+
+        # Broadcast without saving again
         await self.channel_layer.group_send(
             self.room_group_name,
             {
                 'type': 'chat_message',
-                'message': text_data,
-                 # Include the message ID in the event
-                # Include avatar if provided   
+                'message': json.dumps(data)
             }
         )
 
     async def chat_message(self, event):
-        data = json.loads(event['message'])
-        id = await self.save_message(self.group,data['sender'], data['body'], data.get('avatar', None))
-        data['id'] = id  # Add the message ID to the data
-        event['message'] = json.dumps(data)  # Convert back to JSON string
+    # Just send the message to the client — no saving here
         await self.send(text_data=event['message'])
+
 
     @database_sync_to_async
     def get_comic_group(self, id):
@@ -57,5 +62,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
             body=body,
             avatar=avatar
         )
-        print(message)
+
+        
         return message.id
