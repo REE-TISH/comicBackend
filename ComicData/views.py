@@ -1,16 +1,22 @@
 from rest_framework import generics
 from .models import Comic, ComicGroup,Chapter
 from .serializers import ComicSerializer, ComicGroupSerializer,ComicDetailSerializer,ChapterSerializer
+from rest_framework.pagination import PageNumberPagination
 
+class CustomPageNumberPagination(PageNumberPagination):
+    page_size = 5
+    page_size_query_param = 'page_size'
+    max_page_size = 100
 # For getting list of all the comics
 class ComicListView(generics.ListAPIView):
     queryset = Comic.objects.all()
     serializer_class = ComicSerializer  
-
+    pagination_class = CustomPageNumberPagination
 
 class ComicGroupListView(generics.ListAPIView):
     queryset = ComicGroup.objects.all()
     serializer_class = ComicGroupSerializer
+    pagination_class = CustomPageNumberPagination
 
 class ComicGroupDetailView(generics.RetrieveAPIView):
     queryset = ComicGroup.objects.all()
