@@ -14,10 +14,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-ud@r1)uel=01%w_96+d7fg^ch!@q7(v7$#%#f&vh0%j^1aleew'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = [".onrender.com",   # allow your Render backend domain
-    "localhost"]
+ALLOWED_HOSTS = [".onrender.com",]
 
 
 # Application definition
@@ -63,11 +62,7 @@ CHANNEL_LAYERS = {
 ROOT_URLCONF = 'comicBackend.urls'
 
 CORS_ORIGIN_ALLOW_ALL = False
-CORS_ORIGIN_WHITELIST = [
-            'http://localhost:8000',
-            'http://localhost:5173', 
-            'https://your-production-domain.com',
-        ]
+CORS_ORIGIN_WHITELIST = ['https://reetish-bookstore.vercel.app',]
 
 TEMPLATES = [
     {
