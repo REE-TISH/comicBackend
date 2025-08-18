@@ -10,4 +10,4 @@ class ComicGroupMessageSerializer(ModelSerializer):
 class CommentSectionSerializer(ModelSerializer):
     class Meta:
         model = Comments
-        field = '__all__'
+        fields = '__all__'
