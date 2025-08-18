@@ -11,3 +11,16 @@ class ComicGroupMessage(models.Model):
 
     def __str__(self):
         return f"{self.sender} in {self.comic_group.name}: {self.body[:30]}..."
+
+
+class Comments(models.Model):
+    sender = models.CharField(max_length=150,blank=True,null=True)
+    body = models.TextField(blank=True,null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    user_id = models.CharField(max_length=200,blank=True,null=True)
+
+    class Meta:
+        ordering = ['created_at']
+
+    def __str__(self):
+        return self.sender

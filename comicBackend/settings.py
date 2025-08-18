@@ -6,7 +6,6 @@ import dj_database_url
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
@@ -14,9 +13,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-ud@r1)uel=01%w_96+d7fg^ch!@q7(v7$#%#f&vh0%j^1aleew'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = [".onrender.com",]
+ALLOWED_HOSTS = [".onrender.com"]
 
 
 # Application definition
@@ -62,7 +61,7 @@ CHANNEL_LAYERS = {
 ROOT_URLCONF = 'comicBackend.urls'
 
 CORS_ORIGIN_ALLOW_ALL = False
-CORS_ORIGIN_WHITELIST = ['https://reetish-bookstore.vercel.app',]
+CORS_ORIGIN_WHITELIST = ['https://reetish-bookstore.vercel.app']
 
 TEMPLATES = [
     {
@@ -87,7 +86,7 @@ WSGI_APPLICATION = 'comicBackend.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.environ.get("DATABASE_URL")
+        default=os.environ.get('DATABASE_URL')
     )
 }
 
