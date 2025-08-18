@@ -1,7 +1,7 @@
 from rest_framework import generics
-from .models import ComicGroupMessage
+from .models import ComicGroupMessage,Comments
 from ComicData.models import ComicGroup
-from .serializers import ComicGroupMessageSerializer
+from .serializers import ComicGroupMessageSerializer,CommentSectionSerializer
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 
@@ -27,3 +27,7 @@ class ComicGroupMessageListView(generics.ListAPIView):
         if not serializer.data:
             return Response({"detail": "No messages found for this comic group.",'status': 404})
         return Response(serializer.data)
+
+class CommentListView(generics.ListAPIView):
+    queryset = Comments.objects.all()
+    serializer_class = CommentSectionSerializer
