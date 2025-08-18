@@ -31,3 +31,8 @@ class ComicGroupMessageListView(generics.ListAPIView):
 class CommentListView(generics.ListAPIView):
     queryset = Comments.objects.all()
     serializer_class = CommentSectionSerializer
+
+
+class CommentAddView(generics.ListAPIView):
+    queryset = Comments.objects.all()
+    serializer_class = CommentSectionSerializer
