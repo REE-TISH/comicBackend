@@ -1,5 +1,5 @@
 from django.db import models
-from ComicData.models import ComicGroup
+from ComicData.models import ComicGroup,Chapter
 
 # Create your models here.
 class ComicGroupMessage(models.Model):
@@ -18,9 +18,21 @@ class Comments(models.Model):
     body = models.TextField(blank=True,null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     user_id = models.CharField(max_length=200,blank=True,null=True)
-
+    related_chapter = models.ForeignKey(Chapter,on_delete=models.CASCADE,related_name='ChapterComments')
+    
     class Meta:
         ordering = ['created_at']
 
     def __str__(self):
-        return self.sender
+        return f'{self.sender} sent {self.body}'
+
+class InboxComments(models.Model):
+    sender = models.CharField(max_length=150,blank=True,null=True)
+    body = models.TextField(blank=True,null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    user_id = models.CharField(max_length=200,blank=True,null=True)
+    ParentMsg = models.ForeignKey(Comments,on_delete=models.CASCADE,related_name='CommentsChild')
+
+    def __str__(self):
+        return f'{self.sender} sent {self.body}'
+    
