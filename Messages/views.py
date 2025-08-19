@@ -1,7 +1,7 @@
 from rest_framework import generics
-from .models import ComicGroupMessage,Comments
-from ComicData.models import ComicGroup
-from .serializers import ComicGroupMessageSerializer,CommentSectionSerializer
+from .models import ComicGroupMessage,Comments,InboxComments
+from ComicData.models import ComicGroup,Chapter
+from .serializers import ComicGroupMessageSerializer,CommentSectionSerializer,InboxCommentsSerializer
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 
@@ -32,7 +32,22 @@ class CommentListView(generics.ListAPIView):
     queryset = Comments.objects.all()
     serializer_class = CommentSectionSerializer
 
+
+
 class CommentAddView(generics.CreateAPIView):
     queryset = Comments.objects.all()
     serializer_class = CommentSectionSerializer
+
+    def perform_create(self, serializer):
+        chapter = Chapter.objects.get(id=self.kwargs['chapter_id'])
+        serializer.save(related_chapter=chapter)
+
+
+class InBoxCommentAddView(generics.CreateAPIView):
+    queryset = InboxComments.objects.all()
+    serializer_class = InboxCommentsSerializer
+
+    def perform_create(self, serializer):
+        ParentMsg = Comments.objects.get(id=self.kwargs['msg_id'])
+        serializer.save(ParentMsg=ParentMsg)
 

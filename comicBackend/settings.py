@@ -15,7 +15,7 @@ SECRET_KEY = 'django-insecure-ud@r1)uel=01%w_96+d7fg^ch!@q7(v7$#%#f&vh0%j^1aleew
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = [".onrender.com"]
+ALLOWED_HOSTS = [".onrender.com","localhost"]
 
 
 # Application definition
@@ -87,6 +87,7 @@ WSGI_APPLICATION = 'comicBackend.wsgi.application'
 DATABASES = {
     'default': dj_database_url.config(
         default=os.environ.get('DATABASE_URL')
+        
     )
 }
 
