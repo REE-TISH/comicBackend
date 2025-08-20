@@ -1,9 +1,10 @@
 from rest_framework import generics
 from .models import ComicGroupMessage,Comments,InboxComments
-from ComicData.models import ComicGroup,Chapter
+from ComicData.models import ComicGroup,Chapter,Comic
 from .serializers import ComicGroupMessageSerializer,CommentSectionSerializer,InboxCommentsSerializer
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
+
 
 # Create your views here.
 class CustomPageNumberPagination(PageNumberPagination):
@@ -33,7 +34,12 @@ class CommentListView(generics.ListAPIView):
     serializer_class = CommentSectionSerializer
 
     def get_queryset(self):
-        chapter = Chapter.objects.get(id=self.kwargs['chapter_id'])
+        comic = Comic.objects.get(id=self.kwargs['comic_id'])
+        if not comic:
+            return []
+        chapter = Chapter.objects.get(chapter_number=self.kwargs['chapter_no'])
+        if not chapter:
+            return []
         return chapter.ChapterComments.all()
 
 
