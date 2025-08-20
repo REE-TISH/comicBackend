@@ -2,6 +2,7 @@ from rest_framework import generics
 from .models import Comic, ComicGroup,Chapter
 from .serializers import ComicSerializer, ComicGroupSerializer,ComicDetailSerializer,ChapterSerializer
 from rest_framework.pagination import PageNumberPagination
+from django.shortcuts import get_object_or_404
 
 class CustomPageNumberPagination(PageNumberPagination):
     page_size = 5
@@ -34,8 +35,9 @@ class ChapterView(generics.RetrieveAPIView):
     lookup_field = 'id'
 
     def get_object(self,*args,**kwargs):
-        comic = Comic.objects.get(id=self.kwargs['comic_id'])
-        chapter = Chapter.objects.get(comic=comic,chapter_number=self.kwargs['id'])  
+        comic = Comic.objects.get_object_or_404(id=self.kwargs['comic_id'])
+        chapter = Chapter.objects.get_object_or_404(comic=comic,chapter_number=self.kwargs['id'])  
+    
         return chapter      
 
 
