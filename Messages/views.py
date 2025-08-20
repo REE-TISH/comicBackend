@@ -37,7 +37,7 @@ class CommentListView(generics.ListAPIView):
         comic = Comic.objects.get(id=self.kwargs['comic_id'])
         if not comic:
             return []
-        chapter = Chapter.objects.get(chapter_number=self.kwargs['chapter_no'])
+        chapter = Chapter.objects.get(chapter_number=self.kwargs['chapter_no'],comic=comic)
         if not chapter:
             return []
         return chapter.ChapterComments.all()
