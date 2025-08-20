@@ -33,7 +33,7 @@ class CommentListView(generics.ListAPIView):
     serializer_class = CommentSectionSerializer
 
     def get_queryset(self):
-        chapter = self.kwargs['chapter_id']
+        chapter = Chapter.objects.get(id=self.kwargs['chapter_id'])
         return chapter.ChapterComments.all()
 
 
