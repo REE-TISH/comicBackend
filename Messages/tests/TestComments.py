@@ -2,16 +2,35 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 from django.urls import reverse
 from ..models import ComicGroupMessage,Comments
+from ComicData.models import Comic,Chapter
 
-class TestComments(TestCase):
+
+
+class TestAddCommentsView(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.comment = Comments.objects.create(
-            sender='Reetish',
-            body='fkldsjafads',
-            user_id = 'fdsafsadfasdfas'
+        self.commic = Comic.objects.create(
+            title='testRun',
+            author='Reetsih',
+            description='Please work',
+            published_date='2025-12-03',
+            rating=4.9
+            
         )
-
-    def test_comment_API_Response(self):
-        response = self.client.get(reverse('comment-list'))
+        self.chapter = Chapter.objects.create(
+            comic=self.commic,
+            title='heljfsad',
+            chapter_number = 1
+        )
+    
+    def test_postRequest_api(self):
+        data = {
+            'sender':'Reetish',
+            'body':'how are you',
+            'user_id':'fdaklfjasf'
+        }
+        response = self.client.post(reverse('comment-add',kwargs={'comic_id':1,'chapter_no':1}),data)
+        print(response.json())
         self.assertEqual(response.status_code,200)
+        self.assertEqual(response.json()['data'],'how are you')
+        

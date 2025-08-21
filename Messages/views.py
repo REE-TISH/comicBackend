@@ -4,7 +4,7 @@ from ComicData.models import ComicGroup,Chapter,Comic
 from .serializers import ComicGroupMessageSerializer,CommentSectionSerializer,InboxCommentsSerializer
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
-
+from rest_framework.decorators import api_view
 
 # Create your views here.
 class CustomPageNumberPagination(PageNumberPagination):
@@ -50,9 +50,20 @@ class CommentAddView(generics.CreateAPIView):
     def perform_create(self, serializer):
         comic = Comic.objects.get(id=self.kwargs['comic_id'])
         chapter = Chapter.objects.get(chapter_number=self.kwargs['chapter_no'],comic=comic)
-        print(self.request.data)
+        
         serializer.save(related_chapter=chapter,sender=self.request.data.get('sender'),body=self.request.data.get('body'),user_id=self.request.data.get('user_id'))
 
+@api_view(['POST'])
+def CommentAddFunction(request,comic_id,chapter_no):
+    comic = Comic.objects.get(id=comic_id)
+    chapter = Chapter.objects.get(chapter_number = chapter_no,comic=comic)
+    comment = Comments.objects.create(sender=request.data.get('sender'),body=request.data.get('body'),user_id=request.data.get('user_id'),related_chapter=chapter)
+    
+    return Response({
+        'sender':comment.sender,
+        'body':comment.body,
+        'created_at':comment.created_at
+    },status=200)
 
 class InBoxCommentAddView(generics.CreateAPIView):
     queryset = InboxComments.objects.all()
