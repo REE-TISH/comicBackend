@@ -49,7 +49,7 @@ class CommentAddView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         comic = Comic.objects.get(id=self.kwargs['comic_id'])
-        chapter = Chapter.objects.get(chapter_number=self.kwargs['chapter_no'])
+        chapter = Chapter.objects.get(chapter_number=self.kwargs['chapter_no'],comic=comic)
         serializer.save(related_chapter=chapter)
 
 
