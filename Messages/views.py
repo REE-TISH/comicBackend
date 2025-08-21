@@ -48,7 +48,8 @@ class CommentAddView(generics.CreateAPIView):
     serializer_class = CommentSectionSerializer
 
     def perform_create(self, serializer):
-        chapter = Chapter.objects.get(id=self.kwargs['chapter_id'])
+        comic = Comic.objects.get(id=self.kwargs['comic_id'])
+        chapter = Chapter.objects.get(chapter_number=self.kwargs['chapter_no'])
         serializer.save(related_chapter=chapter)
 
 
