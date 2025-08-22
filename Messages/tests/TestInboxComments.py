@@ -5,8 +5,7 @@ from ..models import ComicGroupMessage,Comments
 from ComicData.models import Comic,Chapter
 
 
-
-class TestAddCommentsView(TestCase):
+class TestInBoxComments(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.commic = Comic.objects.create(
@@ -22,17 +21,20 @@ class TestAddCommentsView(TestCase):
             title='heljfsad',
             chapter_number = 1
         )
-    
-    def test_postRequest_api(self):
+        self.comment = Comments.objects.create(
+            sender='Reetish',
+            body='how are you',
+            user_id='jfkladsfasdf',
+            related_chapter = self.chapter
+            )
+        
+    def test_InBoxCommentPOST(self):
         data = {
             'sender':'Reetish',
             'body':'how are you',
             'user_id':'fdaklfjasf'
         }
-        response = self.client.post(reverse('comment-add',kwargs={'comic_id':1,'chapter_no':1}),data)
-
+        
+        response = self.client.post(reverse('Inbox-comment',kwargs={'comment_id':self.chapter.id}),data)
+        print(response.json())
         self.assertEqual(response.status_code,200)
-
-
-
-
