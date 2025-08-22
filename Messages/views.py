@@ -44,24 +44,29 @@ class CommentListView(generics.ListAPIView):
 
 
 
-
 @api_view(['POST'])
 def CommentAddFunction(request,comic_id,chapter_no):
     comic = Comic.objects.get(id=comic_id)
     chapter = Chapter.objects.get(chapter_number = chapter_no,comic=comic)
-    comment = Comments.objects.create(sender=request.data.get('sender'),body=request.data.get('body'),user_id=request.data.get('user_id'),related_chapter=chapter)
-    
+
+    comment = Comments.objects.create(sender=request.data['sender'],body=request.data['body'],user_id=request.data['user_id'],related_chapter=chapter)
+
     return Response({
+        'id':comment.id,
         'sender':comment.sender,
         'body':comment.body,
         'created_at':comment.created_at
     },status=200)
 
-class InBoxCommentAddView(generics.CreateAPIView):
-    queryset = InboxComments.objects.all()
-    serializer_class = InboxCommentsSerializer
+@api_view(['POST'])
+def InBoxCommentAddView(request,comment_id):
+    comment = Comments.objects.get(id=int(comment_id))
+    Reply = InboxComments.objects.create(sender=request.data['sender'],body=request.data['body'],user_id=request.data['user_id'],ParentMsg=comment)
+    return Response({
+        'id':Reply.id,
+        'sender':Reply.sender,
+        'body':Reply.body,
+        'user_id':Reply.user_id
+    },status=200)
 
-    def perform_create(self, serializer):
-        ParentMsg = Comments.objects.get(id=self.kwargs['msg_id'])
-        serializer.save(ParentMsg=ParentMsg)
 
