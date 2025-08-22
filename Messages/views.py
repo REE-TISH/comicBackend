@@ -44,16 +44,6 @@ class CommentListView(generics.ListAPIView):
 
 
 
-class CommentAddView(generics.CreateAPIView):
-    queryset = Comments.objects.all()
-    serializer_class = CommentSectionSerializer
-
-    def perform_create(self, serializer):
-        comic = Comic.objects.get(id=self.kwargs['comic_id'])
-        chapter = Chapter.objects.get(chapter_number=self.kwargs['chapter_no'],comic=comic)
-        
-        serializer.save(related_chapter=chapter,sender=self.request.data.get('sender'),body=self.request.data.get('body'),user_id=self.request.data.get('user_id'))
-
 @api_view(['POST'])
 def CommentAddFunction(request,comic_id,chapter_no):
     comic = Comic.objects.get(id=comic_id)
