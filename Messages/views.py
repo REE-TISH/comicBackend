@@ -60,7 +60,7 @@ def CommentAddFunction(request,comic_id,chapter_no):
 
 @api_view(['POST'])
 def InBoxCommentAddView(request,comment_id):
-    comment = Comments.objects.get(id=int(comment_id))
+    comment = Comments.objects.get(id=comment_id)
     Reply = InboxComments.objects.create(sender=request.data['sender'],body=request.data['body'],user_id=request.data['user_id'],ParentMsg=comment)
     return Response({
         'id':Reply.id,
