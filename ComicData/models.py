@@ -34,3 +34,28 @@ class ComicGroup(models.Model):
 
     def __str__(self):
         return self.name
+    
+
+class Novels(models.Model):
+    title = models.CharField(max_length=200)
+    author = models.CharField(max_length=100)
+    description = models.TextField()
+    published_date = models.DateField()
+    cover_image = models.URLField(blank=True, null=True)
+    rating = models.DecimalField(max_digits=2, decimal_places=1, blank=True, null=True)
+    genre = models.JSONField(blank=True, null=True)
+
+    def __str__(self):
+        return self.title
+    
+class NovelChapter(models.Model):
+    novel = models.ForeignKey(Novels,on_delete=models.CASCADE,related_name='novelChapters')
+    title = models.CharField(max_length=200)
+    chapter_no = models.IntegerField()
+    Content = models.TextField()
+
+    def __str__(self):
+        return f'{self.novel.title}s chapter no {self.chapter_no}'
+    
+    class Meta:
+        ordering = ['chapter_no']

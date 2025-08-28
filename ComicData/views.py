@@ -1,6 +1,13 @@
 from rest_framework import generics
-from .models import Comic, ComicGroup,Chapter
-from .serializers import ComicSerializer, ComicGroupSerializer,ComicDetailSerializer,ChapterSerializer
+from .models import Comic, ComicGroup,Chapter,Novels,NovelChapter
+from .serializers import (ComicSerializer, 
+                          ComicGroupSerializer,
+                          ComicDetailSerializer,
+                          ChapterSerializer,
+                          NovelSerializer,
+                          NovelDetailSerializer,
+                          NovelChapterSerializer)
+
 from rest_framework.pagination import PageNumberPagination
 from django.shortcuts import get_object_or_404
 
@@ -41,3 +48,25 @@ class ChapterView(generics.RetrieveAPIView):
         return chapter      
 
 
+#For getting list of Novels
+class NovelListView(generics.ListAPIView):
+    queryset = Novels.objects.all()
+    serializer_class = NovelSerializer
+
+class NovelView(generics.RetrieveAPIView):
+    queryset = Novels.objects.all()
+    serializer_class = NovelDetailSerializer
+    lookup_field = 'pk'
+
+class NovelChapterView(generics.RetrieveAPIView):
+    queryset = NovelChapter.objects.all()
+    serializer_class = NovelChapterSerializer
+    lookup_field = 'id'
+
+    def get_object(self,*args,**kwargs):
+        print(self.kwargs['novel_id'])
+        novel = Novels.objects.get(id=self.kwargs['novel_id'])
+        
+        chapter = NovelChapter.objects.get(novel=novel,chapter_no=self.kwargs['id'])  
+        
+        return chapter      
