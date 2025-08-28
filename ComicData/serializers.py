@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Comic,ComicGroup,Chapter
+from .models import Comic,ComicGroup,Chapter,Novels,NovelChapter
 
 class ComicSerializer(serializers.ModelSerializer):
     class Meta:
@@ -35,3 +35,24 @@ class ChapterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chapter   
         fields = '__all__'
+
+class NovelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Novels
+        fields = '__all__'
+
+class NovelChapterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NovelChapter
+        fields = '__all__'
+
+
+class NovelDetailSerializer(serializers.ModelSerializer):
+    chapters = serializers.SerializerMethodField(read_only=True)
+    class Meta:
+        model = Novels
+        fields = ['id','title','author','description','published_date','cover_image','rating','genre','chapters']
+
+    def get_chapters(self,obj):
+        chapters = len(obj.novelChapters.all())
+        return chapters
