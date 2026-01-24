@@ -15,7 +15,6 @@ Users can log in, join manga-specific groups, and chat while reading.
 
 ##Installation (Local setup)
 
-initialize git by typing 'git init' in terminal <br/>
 git clone https://github.com/REE-TISH/comicBackend.git <br/>
 cd comicBackend <br/>
 python -m venv venv #Creates virtual Env <br/>
