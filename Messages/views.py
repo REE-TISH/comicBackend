@@ -6,12 +6,15 @@ from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.decorators import api_view
 
-# Create your views here.
+# Custom Paginator 
 class CustomPageNumberPagination(PageNumberPagination):
     page_size = 5
     page_size_query_param = 'page_size'
     max_page_size = 100
 
+# Create your views here.
+
+# Sends the existing Comic Group data 
 class ComicGroupMessageListView(generics.ListAPIView):
     queryset = ComicGroupMessage.objects.all()
     serializer_class = ComicGroupMessageSerializer
@@ -29,6 +32,8 @@ class ComicGroupMessageListView(generics.ListAPIView):
             return Response({"detail": "No messages found for this comic group.",'status': 404})
         return Response(serializer.data)
 
+
+# Sends the Comments made on the novel
 class CommentListView(generics.ListAPIView):
     queryset = Comments.objects.all()
     serializer_class = CommentSectionSerializer
@@ -43,7 +48,7 @@ class CommentListView(generics.ListAPIView):
         return chapter.ChapterComments.all()
 
 
-
+# For commenting on a novel
 @api_view(['POST'])
 def CommentAddFunction(request,comic_id,chapter_no):
     comic = Comic.objects.get(id=comic_id)
@@ -58,6 +63,8 @@ def CommentAddFunction(request,comic_id,chapter_no):
         'created_at':comment.created_at
     },status=200)
 
+
+# For commenting on other user Comment
 @api_view(['POST'])
 def InBoxCommentAddView(request,comment_id):
     comment = Comments.objects.get(id=comment_id)

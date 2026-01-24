@@ -14,7 +14,7 @@ class Comic(models.Model):
     def __str__(self):
         return self.title
 
-#Chapter model to store chapter details related to a comic
+# Chapter model to store chapter details related to a comic
 class Chapter(models.Model):
     comic = models.ForeignKey(Comic, related_name='chapters', on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
@@ -35,7 +35,7 @@ class ComicGroup(models.Model):
     def __str__(self):
         return self.name
     
-
+# Novels model to store novel data
 class Novels(models.Model):
     title = models.CharField(max_length=200)
     author = models.CharField(max_length=100)
@@ -47,7 +47,8 @@ class Novels(models.Model):
 
     def __str__(self):
         return self.title
-    
+
+# Novel chapter contains content of novel chapter
 class NovelChapter(models.Model):
     novel = models.ForeignKey(Novels,on_delete=models.CASCADE,related_name='novelChapters')
     title = models.CharField(max_length=200)
